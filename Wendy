@@ -1,0 +1,254 @@
+
+function Start() {
+    var thread = threads.start(
+        function () {
+            原来的Start()
+        }
+    )
+}
+
+function 原来的Start() {
+    auto.waitFor();
+    console.show();
+    sleep(200);
+    console.setPosition(0, 0);
+    sleep(300);
+    console.setSize(500, 550);
+    sleep(1000);
+    log(currentActivity());
+
+    events.observeKey();
+    events.on("key_down", function (keyCode, events) {
+        //音量键关闭脚本
+        if (keyCode == keys.volume_up || keyCode == keys.volume_down) {
+            // thread.interrupt();
+            // engines.stopAll();
+            // threads.start(
+            //     function () {
+            //         Stop();
+            //     }
+            // )
+            toastLog("脚本已结束");
+        }
+    });
+
+    var aa = 1;
+    var bb = 1;
+    var num = 0;
+    while (aa == 1) {
+        for (i = 1; i <= 10; i++) {
+            if (currentPackage() == "com.taobao.taobao") {
+                if (bb == 1) {
+                    log("恭喜你节省了10秒");
+                } else {
+                    log("成功打开淘宝!");
+                }
+                aa = 2;
+                break;
+            }
+            if (bb == 1) {
+                log("保证以下3种情况之一：\n1、在淘宝首页\n2、在喵店首页\n3、尚未打开淘宝\n" + (10 - i) + "秒后启动");
+            } else {
+                log("等待淘宝打开..." + (10 - i));
+            }
+            sleep(1200)
+        }
+        if (aa != 2) {
+            bb = 2;
+            sleep(1000);
+            launchApp("手机淘宝");
+            log("启动淘宝中...");
+            sleep(3000);
+        }
+    }
+    sleep(2500);
+    log("=============\n||                       ||\n||我来抓喵啦~ ||\n||                       ||\n=============");
+    sleep(2500);
+
+    while (true) {
+        if (currentActivity() == "com.taobao.tao.TBMainActivity") {
+            log("淘宝首页");
+            if (desc("狂欢开场").findOne(2000)) {
+                console.log("进入喵店铺");
+                click(desc("狂欢开场").findOne().bounds().centerX(), desc("狂欢开场").findOne().bounds().centerY() + 200);
+            }
+        } else if (textStartsWith("队伍红包").findOne(1000) && idContains("taskBottomSheet").findOne(1000) == null) {
+            console.log("进入领喵币");
+            click(device.width - (textStartsWith("队伍红包").findOne(1000).bounds().centerX() + 50), textStartsWith("队伍红包").findOne(1000).bounds().centerY());
+        } else if (idContains("taskBottomSheet").findOne(1000)) {
+            if (text("签到").findOne(1000)) {
+                text("签到").click();
+                log("签到");
+                sleep(2000)
+            } else if (text("已签到").findOne(1000)) {
+                toastLog("已经签到了哦");
+            }
+            if (text("去浏览").findOne(1000)) {
+                text("去浏览").click();
+                log("去浏览");
+                sleep(2000);
+                var zzz = 1
+                for (i = 0; i <= 20; i++) {
+                    if (className("android.view.View").desc("签到领喵币").findOne(1000)) {
+                        className("android.view.View").desc("签到领喵币").findOne(1000).parent().click();
+                        toastLog("签到领猫币");
+                        sleep(1500);
+                    };
+                    if (desc("开心收下").findOne(500)) {
+                        if (desc("+").findOne()) {
+                            if (descStartsWith("奖励").descEndsWith("喵币").boundsInside(0, 0, device.width / 2, device.height).findOne(1000)) {
+                                var eee = textStartsWith("已获得").textEndsWith("喵币").findOne(1500).getText();
+                            }
+                            if (descStartsWith("奖励").descEndsWith("喵币").boundsInside(device.width / 2, 0, device.width, device.height).findOne(1000)) {
+                                var fff = textStartsWith("已获得").textEndsWith("喵币").findOne(1500).getText();
+                            }
+                            log("本次领喵币：" + parseInt(eee.replace(/[^0-9]/ig, "")) + parseInt(fff.replace(/[^0-9]/ig, "")));
+                            num = parseInt(num) + parseInt(eee.replace(/[^0-9]/ig, "")) + parseInt(fff.replace(/[^0-9]/ig, ""));
+                            log("总领取喵币：" + num);
+                        } else {
+                            if (descStartsWith("奖励").descEndsWith("喵币").findOne(1000)) {
+                                var ddd = textStartsWith("已获得").textEndsWith("喵币").findOne(1500).getText();
+                                log("本次领喵币：" + ddd.replace(/[^0-9]/ig, ""));
+                                num = parseInt(num) + parseInt(ddd.replace(/[^0-9]/ig, ""));
+                                log("总领取喵币：" + num);
+                            }
+                        }
+                        sleep(1000);
+                        desc("开心收下").findOne(1000).click();
+                        // click(desc("开心收下").findOne().bounds().centerX(), desc("开心收下").findOne().bounds().centerY())
+                        log("收取弹窗奖励");
+                    }
+                    sleep(500);
+                    log("浏览倒计时" + (20 - i))
+                    if (text("重新加载").findOne(500) && textContains("加载超时").findOne(500)) {
+                        console.setSize(700, 650);
+                        sleep(1000);
+                        text("重新加载").click();
+                        log("哼！小猫咪居然加载超时\n我已经点击重新加载啦");
+                        sleep(3000);
+                        console.setSize(500, 550);
+                    }
+
+                    if (zzz = 1) {
+                        var ccccc
+                        if (textEndsWith("00喵币").findOnce()) {
+                            ccccc = textEndsWith("00喵币").findOnce().getText();
+                            log("本次浏览得" + ccccc.replace(/[^0-9]/ig, ""));
+                            sleep(1000);
+                            zzz = 2;
+                        } else if (descEndsWith("00喵币").findOnce()) {
+                            ccccc = descEndsWith("00喵币").findOnce().getText();
+                            log("本次浏览得" + ccccc.replace(/[^0-9]/ig, ""));
+                            sleep(1000);
+                            zzz = 2;
+                        };
+                    }
+                    if (descContains("任务完成").findOnce() || textContains("任务完成").findOnce()) {
+                        log("浏览已完成\n奖励：" + ccccc.replace(/[^0-9]/ig, ""));
+                        num = parseInt(num) + parseInt(ccccc.replace(/[^0-9]/ig, ""));
+                        log("总领取喵币：" + num);
+                        sleep(1000);
+                        desc("转到上一层级").click();
+                        sleep(1000);
+                        break;
+                    }
+
+                    if (textStartsWith("已获得").textEndsWith("喵币").findOne(1000)) {
+                        var ccc = textStartsWith("已获得").textEndsWith("喵币").findOne(1500).getText()
+                        log(ccc);
+                        num = parseInt(num) + parseInt(ccc.replace(/[^0-9]/ig, ""));
+                        log("总领取喵币：" + num);
+                        sleep(1000);
+                        desc("转到上一层级").click();
+                        sleep(1000);
+                        break;
+                    }
+                    events.observeToast();
+                    events.onToast(function (toast) {
+                        log("Toast内容: " + toast.getText() + " 包名: " + toast.getPackageName());
+                    });
+                };
+                log("任务完成\n准备下个任务");
+
+            } else if (text("去进店").findOne(1000)) {
+
+                click("去进店");
+                var aaaa = textContains("逛逛").findOne(1000);
+                log(aaaa.getText());
+                sleep(2000);
+                var zzzz = 1;
+                for (i = 0; i <= 20; i++) {
+
+                    if (className("android.view.View").desc("签到领喵币").findOne(1000)) {
+                        className("android.view.View").desc("签到领喵币").findOne(1000).parent().click();
+                        toastLog("签到领猫币");
+                        sleep(1500);
+                    };
+                    if (desc("开心收下").findOne(500)) {
+                        if (desc("+").findOne()) {
+                            if (descStartsWith("奖励").descEndsWith("喵币").boundsInside(0, 0, device.width / 2, device.height).findOne(1000)) {
+                                var eeee = textStartsWith("已获得").textEndsWith("喵币").findOne(1500).getText();
+                            }
+                            if (descStartsWith("奖励").descEndsWith("喵币").boundsInside(device.width / 2, 0, device.width, device.height).findOne(1000)) {
+                                var fff = textStartsWith("已获得").textEndsWith("喵币").findOne(1500).getText();
+                            }
+                            log("本次领喵币：" + parseInt(eeee.replace(/[^0-9]/ig, "")) + parseInt(fff.replace(/[^0-9]/ig, "")));
+                            num = parseInt(num) + parseInt(eeee.replace(/[^0-9]/ig, "")) + parseInt(fff.replace(/[^0-9]/ig, ""));
+                            log("总领取喵币：" + num);
+                        } else {
+                            if (descStartsWith("奖励").descEndsWith("喵币").findOne(1000)) {
+                                var dddd = textStartsWith("已获得").textEndsWith("喵币").findOne(1500).getText();
+                                log("本次领喵币：" + dddd.replace(/[^0-9]/ig, ""));
+                                num = parseInt(num) + parseInt(dddd.replace(/[^0-9]/ig, ""));
+                                log("总领取喵币：" + num);
+                            }
+                        }
+                        sleep(1000);
+                        desc("开心收下").findOne(1000).click();
+                        // click(desc("开心收下").findOne().bounds().centerX(), desc("开心收下").findOne().bounds().centerY())
+                        log("收取弹窗奖励");
+                    }
+                    sleep(500);
+                    log("逛店倒计时" + (20 - i))
+                    if (text("重新加载").findOne(500) && textContains("加载超时").findOne(500)) {
+                        console.setSize(700, 650);
+                        sleep(1000);
+                        text("重新加载").click();
+                        log("哼！小猫咪居然加载超时\n我已经点击重新加载啦");
+                        sleep(3000);
+                        console.setSize(500, 550);
+                    }
+                    if (zzzz = 1) {
+                        var cccc
+                        if (textEndsWith("00喵币").findOnce()) {
+                            cccc = textEndsWith("00喵币").findOnce().getText();
+                            log("本次浏览得" + cccc.replace(/[^0-9]/ig, ""));
+                            sleep(1000);
+                            zzzz = 2;
+                        } else if (descEndsWith("00喵币").findOnce()) {
+                            cccc = descEndsWith("00喵币").findOnce().getText();
+                            log("本次浏览得" + cccc.replace(/[^0-9]/ig, ""));
+                            sleep(1000);
+                            zzzz = 2;
+                        }
+                    };
+                    if (descContains("任务完成").findOnce() || textContains("任务完成").findOnce()) {
+                        log("浏览已完成\n奖励：" + cccc.replace(/[^0-9]/ig, ""));
+                        num = parseInt(num) + parseInt(cccc.replace(/[^0-9]/ig, ""));
+                        log("总领取喵币：" + num);
+                        sleep(1000);
+                        desc("转到上一层级").click();
+                        sleep(1000);
+                        break;
+                    }
+                    events.observeToast();
+                    events.onToast(function (toast) {
+                        log("Toast内容: " + toast.getText() + " 包名: " + toast.getPackageName());
+                    });
+                };
+                log("任务完成\n准备下个任务");
+            }
+        }
+        sleep(5000);
+    };
+};
